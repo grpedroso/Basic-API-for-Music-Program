@@ -29,6 +29,15 @@
             </MudButton>
         </div>
 
+        <div class="d-flex align-center justify-space-between mt-4">
+            <MudButton Variant="Variant.Filled"
+                       @onclick="Voltar"
+                       Color="Color.Secondary"
+                       Class="mr-auto">
+                Voltar
+            </MudButton>
+        </div>
+
     </MudForm>
 </MudPaper>
 
@@ -39,6 +48,11 @@
     public string? NomeArtista { get; set; }
 
     public ArtistaResponse? Artista { get; set; }
+
+    private async Task Voltar()
+    {
+        navigationManager.NavigateTo("/Artistas");
+    }
 
     protected override async Task OnInitializedAsync()
     {
