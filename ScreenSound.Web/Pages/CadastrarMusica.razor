@@ -15,23 +15,23 @@
                       Variant="Variant.Outlined"
                       Required="true"
                       RequiredError="Campo obrigatório." />
-        <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas"
-            Variant="Variant.Outlined" ValueChanged ="ArtistaSelecionado" AnchorOrigin="Origin.BottomCenter">
-            @if (Artistas is not null)
+
+        <MudSelect Class="mt-4" T="ArtistaResponse" Label="Artistas" Variant="Variant.Outlined" ValueChanged="ArtistaSelecionado" AnchorOrigin="Origin.BottomCenter">
+            @if (artistas is not null)
             {
-                @foreach(var artista in Artistas)
+                @foreach (var artista in artistas)
                 {
-                   <MudSelectItem Value="artista" /> 
+                    <MudSelectItem Value="artista" />
                 }
             }
         </MudSelect>
 
-        <MudTextField Class="mt-4" Placeholder="Ano de lançamento"
-                      @bind-Value="anoLancamento"
-                      Variant="Variant.Outlined"
-                      Lines="1"
-                      Required="true"
-                      RequiredError="Campo obrigatório." />
+        <MudNumericField Class="mt-4" Placeholder="Ano de lançamento"
+                         @bind-Value="anoLancamento"
+                         Variant="Variant.Outlined"
+                         Lines="1"
+                         Required="true"
+                         RequiredError="Campo obrigatório." />
 
         <MudSelect Class="mt-4" T="GeneroResponse" Label="Gêneros" Variant="Variant.Outlined" ValueChanged="GeneroSelecionado" AnchorOrigin="Origin.BottomCenter">
             @if (generos is not null)
@@ -57,7 +57,7 @@
                        Class="ml-auto">
                 Cadastrar
             </MudButton>
-            <MudButton Variant="Variant.Filled"                       
+            <MudButton Variant="Variant.Filled"
                        Color="Color.Info"
                        Class="ml-3">
                 Voltar
@@ -72,17 +72,15 @@
     private int anoLancamento;
     private string? nome;
 
-    ICollection<ArtistaResponse>? Artistas;
-    ICollection<GeneroResponse>? generos;
+    private ICollection<ArtistaResponse>? artistas;
+    private ICollection<GeneroResponse>? generos;   
 
     private List<GeneroResponse>? GenerosSelecionados { get; set; } = new();
     private ArtistaResponse? ArtistaDaMusica { get; set; }
 
-
-
     protected override async Task OnInitializedAsync()
     {
-        Artistas = await artistasAPI.GetArtistasAsync();
+        artistas = await artistasAPI.GetArtistasAsync();
         generos = await generoAPI.GetGenerosAsync();
     }
 
@@ -90,6 +88,7 @@
     {
         ArtistaDaMusica = artista;
     }
+
     private void GeneroSelecionado(GeneroResponse genero)
     {
         if (GenerosSelecionados is not null)
@@ -102,7 +101,6 @@
     }
 
     private List<GeneroRequest> GenerosRequest { get; set; } = new();
-
     public async Task Cadastrar()
     {
         if (GenerosSelecionados is not null)
@@ -112,10 +110,10 @@
                 GenerosRequest.Add(new GeneroRequest(genero.Nome, genero.Descricao));
             }
         }
-        var musicaRequest = new MusicaRequest(nome!, ArtistaDaMusica!.Id,
-        anoLancamento, GenerosRequest);
+
+        var musicaRequest = new MusicaRequest(nome!, ArtistaDaMusica!.Id, anoLancamento, GenerosRequest);
         await musicaAPI.AddMusicaAsync(musicaRequest);
         navigationManager.NavigateTo("/MusicasPorArtista");
+        
     }
-
 }

@@ -11,7 +11,6 @@ public class MusicasAPI
     {
         _httpClient = factory.CreateClient("API");
     }
-
     public async Task<MusicaResponse?> GetMusicaPorNomeAsync(string nome)
     {
         return await _httpClient.GetFromJsonAsync<MusicaResponse>($"musicas/{nome}");

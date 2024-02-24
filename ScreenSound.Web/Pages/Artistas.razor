@@ -20,7 +20,6 @@
 
 @code {
     private ICollection<ArtistaResponse>? artistas;
-
     private int tamanho = 8;
     private int totalItens;
     private int totalPaginas;
@@ -36,7 +35,6 @@
             totalPaginas = Convert.ToInt32(Math.Ceiling((totalItens * 1.0) / tamanho));
             this.PaginaMudou(1);
         }
-
     }
 
     private void PaginaMudou(int pageNumber)
@@ -47,5 +45,4 @@
             .Take(tamanho)
             .ToList();
     }
-
 }

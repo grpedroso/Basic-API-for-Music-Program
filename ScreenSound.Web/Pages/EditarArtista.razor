@@ -1,7 +1,9 @@
 ﻿@page "/EditarArtista/{NomeArtista}"
 @inject ArtistasAPI artistasAPI
 @inject NavigationManager navigationManager
-<MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
+@if (Artista is not null)
+{
+    <MudPaper Class="px-8 pt-2 pb-4 mx-12 my-8" Justify="Justify.Center">
 
     <MudText Class="mt-8" Typo="Typo.h4">Edição de Artista</MudText>
 
@@ -22,24 +24,32 @@
 
         <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
+                       Color="Color.Primary"
+                       Class="ml-auto"
+                       @onclick="Editar">
+                Salvar
+            </MudButton>
+            <MudButton Variant="Variant.Filled"
                        @onclick="Deletar"
                        Color="Color.Secondary"
-                       Class="ml-auto">
+                       Class="ml-3">
                 Deletar
             </MudButton>
-        </div>
-
-        <div class="d-flex align-center justify-space-between mt-4">
             <MudButton Variant="Variant.Filled"
-                       @onclick="Voltar"
-                       Color="Color.Secondary"
-                       Class="mr-auto">
+                       Color="Color.Info"
+                       Class="ml-3"
+                       @onclick="VoltarParaListagem">
                 Voltar
             </MudButton>
         </div>
 
     </MudForm>
 </MudPaper>
+}
+else
+{
+    <MudProgressCircular Indeterminate="true"></MudProgressCircular>
+}
 
 @code {
     private string? nome;
@@ -48,11 +58,6 @@
     public string? NomeArtista { get; set; }
 
     public ArtistaResponse? Artista { get; set; }
-
-    private async Task Voltar()
-    {
-        navigationManager.NavigateTo("/Artistas");
-    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,4 +72,15 @@
         navigationManager.NavigateTo("/Artistas");
     }
 
+    private async Task Editar()
+    {
+        var requestEdit = new ArtistaRequestEdit(Artista!.Id, nome!, biografia!,Artista!.FotoPerfil);
+        await artistasAPI.UpdateArtistaAsync(requestEdit);           
+        navigationManager.NavigateTo("/Artistas");     
+    }
+
+    private void VoltarParaListagem()
+    {
+        navigationManager.NavigateTo("/Artistas");
+    }
 }
